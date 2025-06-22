@@ -15,19 +15,12 @@ test('register & authenticate', async ({ page }) => {
   const userName = faker.person.firstName();
   const userPassword = faker.internet.password({ length: 8 });
 
-  console.log(userName);
-  console.log(userPassword);
-
   const registerUser = await page.request.post('http://localhost:8000/register', {
     form: {
       csrfmiddlewaretoken: middlewareToken,
       'new-username': userName,
       password1: userPassword,
       password2: userPassword,
-    },
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Referer: 'http://localhost:8000/login',
     },
   });
 
