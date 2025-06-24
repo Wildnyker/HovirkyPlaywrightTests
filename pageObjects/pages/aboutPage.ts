@@ -10,7 +10,7 @@ export class AboutPage {
   readonly aboutSourcesElementsList: Locator;
   constructor(page: Page) {
     this.page = page;
-    this.aboutHeader = this.page.getByRole('heading');
+    this.aboutHeader = this.page.getByRole('heading', {name:'Library of Dialects'});
     this.aboutDescription = this.page.getByText(
       "Welcome to the online library"
     );
