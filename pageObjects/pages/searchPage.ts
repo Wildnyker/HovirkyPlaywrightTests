@@ -43,4 +43,13 @@ export class SearchPage {
     this.articleOtherDictionarySlovUaLink = this.articleBox.locator('a', {hasText:"Slovnyk.ua"})
     this.articleOtherDictionaryEngLink = this.articleBox.locator('a', {hasText:"ENG"})
   }
+
+  async performSearch(query?: string) {
+    if (query) {
+      await this.searchField.fill(query);
+    }
+    await this.searchField.press('Enter');
+  }
+
+
 }

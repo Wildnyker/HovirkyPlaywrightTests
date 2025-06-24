@@ -7,9 +7,16 @@ test.beforeEach(async ({ page }) => {
 
 
 test.describe('standard search tests',()=>{
-
-  test('submit empty search query', async({page})=>{
     
+  test('submit empty search query', async({page})=>{
+    //Arrange: page object
+    const pm = new PageManager(page)
+    
+    //Act: performing a search with an empty query
+    await pm.onSearchPage().performSearch()
+
+    //Assert: full dictionary returned starting from a first entry
+    await expect(pm.onSearchPage().articleHeading.first()).toHaveText('АБА́ЗЬ')
   })
 
 
