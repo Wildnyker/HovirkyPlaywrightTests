@@ -1,4 +1,5 @@
 import { type Page, type Locator } from "@playwright/test";
+import { HeaderElements } from "../components/header";
 
 export class SearchPage {
   readonly page: Page;
@@ -20,6 +21,7 @@ export class SearchPage {
   readonly articleOtherDictionarySlovMeLink: Locator;
   readonly articleOtherDictionarySlovUaLink: Locator;
   readonly articleOtherDictionaryEngLink: Locator;
+  readonly header:HeaderElements;
 
 
   constructor(page: Page) {
@@ -42,7 +44,10 @@ export class SearchPage {
     this.articleOtherDictionarySlovMeLink = this.articleBox.locator('a', {hasText:"Slovnyk.me"})
     this.articleOtherDictionarySlovUaLink = this.articleBox.locator('a', {hasText:"Slovnyk.ua"})
     this.articleOtherDictionaryEngLink = this.articleBox.locator('a', {hasText:"ENG"})
+    this.header = new HeaderElements(page);
   }
+
+  
 
   async performSearch(query?: string) {
     if (query) {
@@ -51,5 +56,9 @@ export class SearchPage {
     await this.searchField.press('Enter');
   }
 
+  async performSearchWithDialect(dialect:string, query:string){
+    this.header.switchDialect(dialect)
+    this.performSearch(query)
+  }
 
 }

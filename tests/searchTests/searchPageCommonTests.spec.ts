@@ -57,3 +57,14 @@ test.describe('standard search tests with all dialects enabled',()=>{
   })
 
 })
+
+test.describe("standard search with dialects being switched", () => {
+  test('submit 1 word search query for each seaparate dialect', async({})=>{
+    //Arrange: page object
+
+    //Act performing a search for every dialect
+
+    //Assert that every time the result = to expected
+  })
+});
+
