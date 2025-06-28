@@ -57,8 +57,8 @@ export class SearchPage {
   }
 
   async performSearchWithDialect(dialect:string, query:string){
-    this.header.switchDialect(dialect)
-    this.performSearch(query)
+    await this.header.switchDialect(dialect)
+    await this.performSearch(query)
   }
 
 }

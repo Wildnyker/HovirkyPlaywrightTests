@@ -59,12 +59,35 @@ test.describe('standard search tests with all dialects enabled',()=>{
 })
 
 test.describe("standard search with dialects being switched", () => {
-  test('submit 1 word search query for each seaparate dialect', async({})=>{
+  test('submit 1 word search query for each seaparate dialect', async({page})=>{
     //Arrange: page object
-
+    const pm = new PageManager(page)
     //Act performing a search for every dialect
+    const dialects = ['Західнополіський', 'Гуцульський', 'Слобожанський']
+    const query = 'дах'
+    const referenceWords = ['ВИВИШЕНЬ', 'БАБРАТИСИ', 'ВІРА́НДА']
 
-    //Assert that every time the result = to expected
+    //Assert that every time the first found query = to expected
+    for (let i = 0; i < dialects.length; i++) {
+      pm.onSearchPage().performSearchWithDialect(dialects[i], query)
+      await expect(pm.onSearchPage().articleHeading.first()).toHaveText(referenceWords[i])
+    }    
   })
+
+test('verfy that links to other vocablaries are visible for a search result',async ({page})=>{
+  //Arrange: prepare a page manager object
+  const pm = new PageManager(page)
+  
+  //Act: perform a valid search
+  await pm.onSearchPage().performSearch('кофта')
+  
+  //Assert: that first search results has coresponding links to other vocabularies
+  await expect(pm.onSearchPage().articleOtherDictionarySUMLink.first()).toBeVisible()
+  await expect(pm.onSearchPage().articleOtherDictionaryGrinLink.first()).toBeVisible()
+  await expect(pm.onSearchPage().articleOtherDictionarySlovMeLink.first()).toBeVisible()
+  await expect(pm.onSearchPage().articleOtherDictionarySlovUaLink.first()).toBeVisible()
+  await expect(pm.onSearchPage().articleOtherDictionaryEngLink.first()).toBeVisible()
+
+})
 });
 
