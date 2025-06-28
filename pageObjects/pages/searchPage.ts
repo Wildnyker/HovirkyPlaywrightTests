@@ -6,9 +6,7 @@ export class SearchPage {
   readonly searchField: Locator;
   readonly resultsBox: Locator;
   readonly resultsFilterDropdown: Locator;
-  readonly zahidDialectCheckbox: Locator;
-  readonly guculDialewctCheckbox: Locator;
-  readonly sloboDialectCheckbox: Locator;
+  readonly dialectCheckbox:(text:string)=> Locator;
   readonly applyFilterButton: Locator;
   readonly youSearchedParagraph: Locator;
   readonly articleBox: Locator;
@@ -29,9 +27,7 @@ export class SearchPage {
     this.searchField = this.page.getByRole('textbox', { name: 'search' })
     this.resultsBox = this.page.locator('.center')
     this.resultsFilterDropdown = this.page.getByRole('button', { name: 'Filter' })
-    this.zahidDialectCheckbox = this.page.getByRole('checkbox', { name: 'Західнополіський' })
-    this.guculDialewctCheckbox = this.page.getByRole('checkbox', { name: 'Гуцульський' })
-    this.sloboDialectCheckbox =this.page.getByRole('checkbox', { name: 'Слобожанський' })
+    this.dialectCheckbox = (dialect:string) => this.page.getByRole('checkbox', { name: `${dialect}` })
     this.applyFilterButton = this.page.locator('#dialectFilter').getByRole('button', { name: 'Filter' })
     this.youSearchedParagraph = this.page.getByText('You searched:')
     this.articleBox = this.page.locator('article')
@@ -60,5 +56,15 @@ export class SearchPage {
     await this.header.switchDialect(dialect)
     await this.performSearch(query)
   }
+
+  async switchDialectInFilters(dialect:string){
+    await this.resultsFilterDropdown.click()
+
+    await this.dialectCheckbox(dialect).click()
+
+    await this.applyFilterButton.click()
+  }
+
+  
 
 }

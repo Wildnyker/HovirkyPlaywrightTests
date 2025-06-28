@@ -59,11 +59,13 @@ test.describe('standard search tests with all dialects enabled',()=>{
 })
 
 test.describe("standard search with dialects being switched ", () => {
+  const dialects = ['Західнополіський', 'Гуцульський', 'Слобожанський']
+
   test('submit 1 word search query for each seaparate dialect switched via header dropdown', async({page})=>{
-    //Arrange: page object
+    //Arrange: page object & data for test
     const pm = new PageManager(page)
     //Act performing a search for every dialect
-    const dialects = ['Західнополіський', 'Гуцульський', 'Слобожанський']
+    
     const query = 'дах'
     const referenceWords = ['ВИВИШЕНЬ', 'БАБРАТИСИ', 'ВІРА́НДА']
 
@@ -71,8 +73,28 @@ test.describe("standard search with dialects being switched ", () => {
     for (let i = 0; i < dialects.length; i++) {
       pm.onSearchPage().performSearchWithDialect(dialects[i], query)
       await expect(pm.onSearchPage().articleHeading.first()).toHaveText(referenceWords[i])
-    }    
+    }
   })
+  test('verify search refults after aplying dialect filter post general search', async({page})=>{
+    //Arrange: page object & data for test
+    const pm = new PageManager(page)
+    //Act performing a search for every dialect
+    const referenceWordsAfterFilter = ['БУБЛЕНЯ', 'САМОГОНКА', 'БАРА́НЧИК']
+    await pm.onSearchPage().performSearch('відро')
+    
+    //Assert that every time the first filtered query = to expected
+    for (let i = 0; i < dialects.length; i++){
+      //apply dialect via filters
+      await pm.onSearchPage().switchDialectInFilters(dialects[i])
+
+      //check that correct entry is shown as a first one
+      await expect(pm.onSearchPage().articleHeading.first()).toHaveText(referenceWordsAfterFilter[i])
+      //unselect same dialect(clear filters option is not implemented)
+
+      await pm.onSearchPage().switchDialectInFilters(dialects[i])
+    }
+  })    
+})
 test.describe('verify links to other vocabularies', ()=>{
   test('verfy that links to other vocablaries are visible for a search result',async ({page})=>{
     //Arrange: prepare a page manager object
@@ -88,7 +110,4 @@ test.describe('verify links to other vocabularies', ()=>{
     await expect(pm.onSearchPage().articleOtherDictionarySlovUaLink.first()).toBeVisible()
     await expect(pm.onSearchPage().articleOtherDictionaryEngLink.first()).toBeVisible()
   });
-})
-
 });
-
