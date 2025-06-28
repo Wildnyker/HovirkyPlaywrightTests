@@ -58,8 +58,8 @@ test.describe('standard search tests with all dialects enabled',()=>{
 
 })
 
-test.describe("standard search with dialects being switched", () => {
-  test('submit 1 word search query for each seaparate dialect', async({page})=>{
+test.describe("standard search with dialects being switched ", () => {
+  test('submit 1 word search query for each seaparate dialect switched via header dropdown', async({page})=>{
     //Arrange: page object
     const pm = new PageManager(page)
     //Act performing a search for every dialect
@@ -73,21 +73,22 @@ test.describe("standard search with dialects being switched", () => {
       await expect(pm.onSearchPage().articleHeading.first()).toHaveText(referenceWords[i])
     }    
   })
-
-test('verfy that links to other vocablaries are visible for a search result',async ({page})=>{
-  //Arrange: prepare a page manager object
-  const pm = new PageManager(page)
-  
-  //Act: perform a valid search
-  await pm.onSearchPage().performSearch('кофта')
-  
-  //Assert: that first search results has coresponding links to other vocabularies
-  await expect(pm.onSearchPage().articleOtherDictionarySUMLink.first()).toBeVisible()
-  await expect(pm.onSearchPage().articleOtherDictionaryGrinLink.first()).toBeVisible()
-  await expect(pm.onSearchPage().articleOtherDictionarySlovMeLink.first()).toBeVisible()
-  await expect(pm.onSearchPage().articleOtherDictionarySlovUaLink.first()).toBeVisible()
-  await expect(pm.onSearchPage().articleOtherDictionaryEngLink.first()).toBeVisible()
-
+test.describe('verify links to other vocabularies', ()=>{
+  test('verfy that links to other vocablaries are visible for a search result',async ({page})=>{
+    //Arrange: prepare a page manager object
+    const pm = new PageManager(page)
+    
+    //Act: perform a valid search
+    await pm.onSearchPage().performSearch('кофта')
+    
+    //Assert: that first search results has coresponding links to other vocabularies
+    await expect(pm.onSearchPage().articleOtherDictionarySUMLink.first()).toBeVisible()
+    await expect(pm.onSearchPage().articleOtherDictionaryGrinLink.first()).toBeVisible()
+    await expect(pm.onSearchPage().articleOtherDictionarySlovMeLink.first()).toBeVisible()
+    await expect(pm.onSearchPage().articleOtherDictionarySlovUaLink.first()).toBeVisible()
+    await expect(pm.onSearchPage().articleOtherDictionaryEngLink.first()).toBeVisible()
+  });
 })
+
 });
 
