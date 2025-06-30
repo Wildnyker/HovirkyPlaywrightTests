@@ -1,7 +1,6 @@
 import { test, request, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import fs from 'fs';
-import path from 'path';
 
 if (!fs.existsSync('.auth')) {
   fs.mkdirSync('.auth');
@@ -15,7 +14,7 @@ test('register & authenticate', async ({ page }) => {
   const userName = faker.person.firstName();
   const userPassword = faker.internet.password({ length: 8 });
 
-  const registerUser = await page.request.post('http://localhost:8000/register', {
+  await page.request.post('http://localhost:8000/register', {
     form: {
       csrfmiddlewaretoken: middlewareToken,
       'new-username': userName,
@@ -24,7 +23,7 @@ test('register & authenticate', async ({ page }) => {
     },
   });
 
-  const loginUser = await page.request.post('http://localhost:8000/register',{
+  await page.request.post('http://localhost:8000/register',{
     data:{
       'passWord':userPassword,
       'userName':userName
